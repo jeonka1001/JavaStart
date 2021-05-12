@@ -1,0 +1,66 @@
+// 5 3
+// 1 4 3 1 5 3
+// datat : city 크기 , 만나야하는 친구 수 
+// 친구좌표 x,y x,y x,y
+// 친구를 만나는 방법 은??
+
+package com.company;
+
+import java.io.File;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void calcPos(int[] lin, int[] check,int start,int cnt, int max,int [][] meet){
+        if(cnt == max ){
+            int a = 0;
+            int startidx = 0;
+            for(int i = 0 ; i< max ; i ++){
+
+                System.out.print(lin[i]+" ");
+                a+= meet[startidx][lin[i]];
+                startidx = lin[i];
+            }
+            a+=meet[startidx][0];
+            System.out.println("거리 : "+a);
+            return;
+        }
+        for(int i = 1 ; i <= max ; i ++){
+            if(check[i] ==0 ){
+                lin[cnt] = i;
+                check[i] = 1;
+                calcPos(lin,check,i,cnt+1,max,meet);
+                check[i]=0;
+            }
+        }
+    }
+
+    public static void main(String[] args) throws Exception{
+	    Scanner sc = new Scanner(new File("data.txt"));
+
+	    int citySize = sc.nextInt();
+	    int[][] meet = new int[citySize][citySize];
+	    int friend = sc.nextInt();
+
+	    int[][] pos = new int[friend+1][2];
+	    pos[0][1] = 1;
+	    pos[0][0] = 1;
+	    for(int i = 1 ; i <= friend ; i ++){
+	        pos[i][0] = sc.nextInt();
+	        pos[i][1] = sc.nextInt();
+        }
+
+	    for(int i = 0 ; i <= friend ; i ++){
+	        for(int j = 0 ; j <= friend ; j ++){
+	            meet[i][j] = Math.abs(pos[i][1] - pos[j][1]) + Math.abs(pos[i][0] - pos[j][0]);
+                System.out.print(meet[i][j]+" ");
+            }
+            System.out.println(" ");
+        }
+
+	    int[] lin=new int[friend+1];
+	    int[] check = new int [friend+1];
+
+        calcPos(lin, check, 0,0, friend, meet);
+    }
+}
